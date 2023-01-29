@@ -1,0 +1,10 @@
+#header {
+    text-align: center;
+    background: linear-gradient(to right, rgba(48, 29, 226, 0),rgb(52, 17, 82));
+    color: white;
+    /* border: black solid; */
+}
+
+/* #grad {
+    background-color: linear-gradient(to right, rgba(255,0,0,0,) rgba(225,0,0,1));
+} */
