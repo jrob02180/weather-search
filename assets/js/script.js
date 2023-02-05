@@ -63,11 +63,16 @@ var searchButton = document.querySelector('#btn');
 var userForm = document.querySelector('#user-form');
 var fiveDayForecast = document.querySelector('#five-day');
 var apiKey = "d02feca2db0e95acf19c297c2c394117";
-var todaysDate = dayjs().format('MMMM d, YYYY');
+var todaysDate = dayjs().format('MMMM DD, YYYY');
 var todayEl = document.getElementById('today');
 var temp = document.getElementById('temp');
 var wind = document.getElementById('wind');
 var humidity = document.getElementById('humidity');
+var condition = document.getElementById('condition')
+let locationIcon = document.querySelector('.weather-icon');
+// const {icon} = data.weather[0];
+// document.getElementById("icon").src = "https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png";
+
     
 function getApiCity(event) {
     event.preventDefault(); 
@@ -80,12 +85,13 @@ function getApiCity(event) {
         console.log(response);
         return response.json();
     })
-    .then(function(data) {
-        console.log(data);
-        todayEl.textContent = todaysDate;
-    temp.textContent = data.main.temp;
-    wind.textContent = data.wind.gust;
-    humidity.textContent = data.main.humidity;
+    .then(function(data) {      
+    console.log(data);
+    // locationIcon.innerHTML =  `<img src="icons/${icon}.png">`
+    todayEl.textContent = todaysDate;
+    temp.textContent = `${data.main.temp} °F`;
+    wind.textContent = `${data.wind.gust} MPH`;
+    humidity.textContent = `${data.main.humidity} %`;
         var requestURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=imperial`
      
      fetch(requestURL)
@@ -97,21 +103,14 @@ function getApiCity(event) {
     fiveDayForecast.textContent = ""
         for (let i = 5; i < data.list.length; i=i+8) {
             console .log(data.list[i]);
-            fiveDayForecast.innerHTML = fiveDayForecast.innerHTML+ `							<div class="col m-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">
+            var icon = `http://openweathermap.org/img/wn/5d@[].png`
+            fiveDayForecast.innerHTML = fiveDayForecast.innerHTML+ `<div class="col m-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">
             ${data.list[i].dt_txt}
-            <p>Temp: ${data.list[i].main.temp}</p>
-            <p>Wind: ${data.list[i].wind.speed}</p>
-            <p>Humidity ${data.list[i].main.humidity}</p>
-        </div>
-`
-            // var city = document.createElement('h3')
-            // var condition = document.createElement('p')
-            // city.textContent = data[i];
-            // condition.textContent = data[i];
-         
-            // fiveDayForecast.appendChild(city);
-            // fiveDayForecast.appendChild(condition);
-            
+            <p>${data.list[i].weather[0].icon}</p>
+            <p>Temp: ${data.list[i].main.temp} °F</p>
+            <p>Wind: ${data.list[i].wind.speed} MPH</p>
+            <p>Humidity: ${data.list[i].main.humidity} %</p>
+        </div>`            
         }
     })
     })
