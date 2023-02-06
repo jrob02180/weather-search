@@ -59,7 +59,7 @@
     // When page loads, grab all of the cities in LocalStorage
     // When a city name is input into the form and th search button is clicked, append the city to existing local Storage
 
-var searchButton = document.querySelector('#btn');
+var searchButton = document.querySelector('.submit');
 var userForm = document.querySelector('#user-form');
 var fiveDayForecast = document.querySelector('#five-day');
 var apiKey = "d02feca2db0e95acf19c297c2c394117";
@@ -79,6 +79,41 @@ var futureDate5 = document.querySelector('.future-date5');
 
 var today = dayjs();
 var nextDay = [];
+var searched = [];
+console.log(searched);
+
+function init() {
+    var savedCities = JSON.parse(localstorage.getItem("searched"))||[];
+
+    if (savedCities !== null) {
+        searched = savedCities;
+        console.log(searched);
+    }
+    for (let i = 0; i < searched.length; i++) {
+        var city = searched[i];
+        var li = document.createElement("li");
+        li.textContent = city;
+        console.log(city);
+        searchedCities.appendChild(li);
+    }
+}
+
+searchButton.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    var city = searchButton.value.trim();
+    if (city === "") {
+        return;
+    }
+    getApiCity(city)
+
+    searched.push(city)
+    searchButton.value = "";
+    localStorage.setItem("searched", JSON.stringify(searched))
+    init()
+})
+
+init()
     
 function getApiCity(event) {
     event.preventDefault(); 
@@ -90,7 +125,6 @@ function getApiCity(event) {
         let tomorrow = dayjs(today).add(i, "day");
         nextDay.push(tomorrow.format("MMMM DD, YYYY")); 
         }
-        // let locationIcon = document.querySelector('.weather-icon');
         futureDate1.textContent = nextDay[1];
         futureDate2.textContent = nextDay[2];
         futureDate3.textContent = nextDay[3];
