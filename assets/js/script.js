@@ -68,17 +68,35 @@ var todayEl = document.getElementById('today');
 var temp = document.getElementById('temp');
 var wind = document.getElementById('wind');
 var humidity = document.getElementById('humidity');
-var condition = document.getElementById('condition')
-let locationIcon = document.querySelector('.weather-icon');
-// const {icon} = data.weather[0];
-// document.getElementById("icon").src = "https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png";
+var condition = document.getElementById('condition');
+var searchedCities = document.querySelector('.searched-cities');
+var futureDate1 = document.querySelector('.future-date1');
+var futureDate2 = document.querySelector('.future-date2');
+var futureDate3 = document.querySelector('.future-date3');
+var futureDate4 = document.querySelector('.future-date4');
+var futureDate5 = document.querySelector('.future-date5');
 
+
+var today = dayjs();
+var nextDay = [];
     
 function getApiCity(event) {
     event.preventDefault(); 
     var cityName = document.querySelector('#city-name').value;
     console.log(cityName);
     var geocodeUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=imperial`;
+     
+    for (let i = 0; i <= 5; i++) {
+        let tomorrow = dayjs(today).add(i, "day");
+        nextDay.push(tomorrow.format("MMMM DD, YYYY")); 
+        }
+        // let locationIcon = document.querySelector('.weather-icon');
+        futureDate1.textContent = nextDay[1];
+        futureDate2.textContent = nextDay[2];
+        futureDate3.textContent = nextDay[3];
+        futureDate4.textContent = nextDay[4];
+        futureDate5.textContent = nextDay[5];
+        console.log(nextDay);
         
     fetch(geocodeUrl) 
     .then(function (response) {
@@ -87,12 +105,18 @@ function getApiCity(event) {
     })
     .then(function(data) {      
     console.log(data);
-    // locationIcon.innerHTML =  `<img src="icons/${icon}.png">`
-    todayEl.textContent = todaysDate;
+    todayEl.textContent = `${cityName}  (${todaysDate})`;
     temp.textContent = `${data.main.temp} °F`;
     wind.textContent = `${data.wind.gust} MPH`;
-    humidity.textContent = `${data.main.humidity} %`;
-        var requestURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=imperial`
+    humidity.textContent = `${data.main.humidity}%`;
+
+    var iconCode = data.weather[0].icon;
+    var image = document.createElement("img");
+    image.setAttribute("src", "https://openweathermap.org/img/wn/" + iconCode + ".png");
+
+    condition.append(image)
+
+    var requestURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=imperial`
      
      fetch(requestURL)
      .then(function(response) {
@@ -103,13 +127,16 @@ function getApiCity(event) {
     fiveDayForecast.textContent = ""
         for (let i = 5; i < data.list.length; i=i+8) {
             console .log(data.list[i]);
-            var icon = `http://openweathermap.org/img/wn/5d@[].png`
-            fiveDayForecast.innerHTML = fiveDayForecast.innerHTML+ `<div class="col m-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">
-            ${data.list[i].dt_txt}
-            <p>${data.list[i].weather[0].icon}</p>
+            var weatherIcon = document.querySelector('.weather-icon')
+            var fiveDayIcon = data.list[i].weather[0].icon;
+            var image2 = document.createElement("img");
+            image2.setAttribute("src", "https://openweathermap.org/img/wn/" + fiveDayIcon + ".png");
+            
+            fiveDayForecast.innerHTML = fiveDayForecast.innerHTML + `<div class="col m-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">
+            <p class="weather-icon"> fiveDayIcon.append(image2) </p>
             <p>Temp: ${data.list[i].main.temp} °F</p>
             <p>Wind: ${data.list[i].wind.speed} MPH</p>
-            <p>Humidity: ${data.list[i].main.humidity} %</p>
+            <p>Humidity: ${data.list[i].main.humidity}%</p>
         </div>`            
         }
     })
