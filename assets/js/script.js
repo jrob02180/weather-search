@@ -32,11 +32,11 @@
     // Requires latitude and longitude
     
     // Requires City name, RETURNS Lat/Long
-    // Hint: if all of the data coming back from the above is not sufficient, you my need another API.
+    // Hint: if all of the data coming back from the above is not sufficient, you may need another API.
 
 // Event listener
     // Search button
-    // EAch history button
+    // Search history button
 
 //////Functionize /////
 // Write fetch call to API
@@ -59,8 +59,10 @@
     // When page loads, grab all of the cities in LocalStorage
     // When a city name is input into the form and th search button is clicked, append the city to existing local Storage
 
-var searchButton = document.querySelector('.submit');
+var searchButton = document.querySelector('#city-name');
+var submit = document.querySelector('#submit')
 var userForm = document.querySelector('#user-form');
+// var formImput = document.querySelector('.form-input');
 var fiveDayForecast = document.querySelector('#five-day');
 var apiKey = "d02feca2db0e95acf19c297c2c394117";
 var todaysDate = dayjs().format('MMMM DD, YYYY');
@@ -80,10 +82,10 @@ var futureDate5 = document.querySelector('.future-date5');
 var today = dayjs();
 var nextDay = [];
 var searched = [];
-console.log(searched);
+// console.log(searched);
 
 function init() {
-    var savedCities = JSON.parse(localstorage.getItem("searched"))||[];
+    var savedCities = JSON.parse(localStorage.getItem("searched"));
 
     if (savedCities !== null) {
         searched = savedCities;
@@ -98,7 +100,7 @@ function init() {
     }
 }
 
-searchButton.addEventListener("click", function(event) {
+submit.addEventListener("click", function(event) {
     event.preventDefault();
 
     var city = searchButton.value.trim();
@@ -116,7 +118,7 @@ searchButton.addEventListener("click", function(event) {
 init()
     
 function getApiCity(event) {
-    event.preventDefault(); 
+    // event.preventDefault(); 
     var cityName = document.querySelector('#city-name').value;
     console.log(cityName);
     var geocodeUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=imperial`;
@@ -167,6 +169,7 @@ function getApiCity(event) {
             image2.setAttribute("src", "https://openweathermap.org/img/wn/" + fiveDayIcon + ".png");
             
             fiveDayForecast.innerHTML = fiveDayForecast.innerHTML + `<div class="col m-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">
+            <p ></p>
             <p class="weather-icon"> fiveDayIcon.append(image2) </p>
             <p>Temp: ${data.list[i].main.temp} °F</p>
             <p>Wind: ${data.list[i].wind.speed} MPH</p>
@@ -175,6 +178,7 @@ function getApiCity(event) {
         }
     })
     })
-}
+} 
+
     
-userForm.addEventListener('submit', getApiCity);
+// submit.addEventListener('click', getApiCity);

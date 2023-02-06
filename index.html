@@ -15,28 +15,18 @@
 	<header id="header">
 		<h1>Weather Dashboard</h1>
 	</header>
-	<!-- <div class="container">
-		<div class="row">
-			<div class="col-sm-4">Search for a City</div>
-			<input type="text">
-			<button>Search</button>
-			<div class="col-sm-8">City</div>
-		  </div>
-		<div class="col">
-   <div class="col">Search for a City</div>
-		  <div class="col">City</div> -->
 
-	<!-- </div> -->
 	<div class="container">
 		<div class="row">
 			<div class="col">
 				<h3>Search for a City:</h3>
 				<form id="user-form" class="card-body">
-					<input id="city-name" type="text" autofocus="true" class="form-input" />
-          <input id="btn btn-primary" type="submit" value="Submit" class="submit"></input>
+					<input id="city-name" type="text" autofocus="true"/>
+					<button id="submit" class="search">Search</button>
+          			<!-- <input id="btn btn-primary" type="submit" class="submit"></input> -->
 				</form>
 				<div class="col-12 col-md-8">
-					<h3 class="searched-cities"><span id="repo-search-term"></span></h3>
+					<h3 class="searched-cities"></h3>
 					<div id="city-container" class="list-group"></div>
 				</div>
 			</div>
