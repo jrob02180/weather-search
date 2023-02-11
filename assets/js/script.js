@@ -80,6 +80,7 @@ var today = dayjs();
 var nextDay = [];
 var searched = [];
 
+// Pull searched cities from local storage to create list
 function init() {
     var savedCities = JSON.parse(localStorage.getItem("searched"));
 
@@ -106,6 +107,7 @@ function init() {
     }
 }
 
+// Event listener to add searched cities to local storage
 submit.addEventListener("click", function(event) {
     event.preventDefault();
     var city = searchButton.value.trim();
@@ -118,7 +120,8 @@ submit.addEventListener("click", function(event) {
     localStorage.setItem("searched", JSON.stringify(searched))
     init()
 })
-    
+
+//Weather API function 
 function getApiCity(cityName) {
     for (let i = document.images.length; i--> 0;) {
         document.images[i].parentNode.removeChild(document.images[i]);
@@ -136,7 +139,8 @@ function getApiCity(cityName) {
         futureDate4.textContent = nextDay[4];
         futureDate5.textContent = nextDay[5];
         console.log(nextDay);
-        
+    
+    // Pull current weather from API
     fetch(currentWeatherUrl) 
     .then(function (response) {
         console.log(response);
@@ -154,7 +158,8 @@ function getApiCity(cityName) {
     image.setAttribute("src", "https://openweathermap.org/img/wn/" + iconCode + ".png");
     condition.textContent = ""
     condition.append(image)
-
+    
+    // Pull 5 day forecast from API
     var futureWeatherURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=imperial`
      
      fetch(futureWeatherURL)
@@ -165,7 +170,7 @@ function getApiCity(cityName) {
         console.log(data);
     var index = 1
 
-    for (let i = 0; i < data.list.length; i=i+8) {
+    for (let i = 5; i < data.list.length; i= i+8) {
     console .log(data.list[i]);
     var weatherIcon = document.querySelector('.weather-icon'+ index)
     weatherIcon.textContent = ""

@@ -1,8 +1,8 @@
+/* Styling for Header */
 #header {
     text-align: center;
-    background: linear-gradient(to right, rgba(48, 29, 226, 0),rgb(52, 17, 82));
+    background: linear-gradient(to right, rgba(99, 109, 11, 0),rgb(52, 17, 82));
     color: white;
-    /* border: black solid; */
 }
 
 
