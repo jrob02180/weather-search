@@ -61,8 +61,6 @@
 
 var searchButton = document.querySelector('#city-name');
 var submit = document.querySelector('#submit')
-var userForm = document.querySelector('#user-form');
-// var formImput = document.querySelector('.form-input');
 var fiveDayForecast = document.querySelector('#five-day');
 var apiKey = "d02feca2db0e95acf19c297c2c394117";
 var todaysDate = dayjs().format('MMMM DD, YYYY');
@@ -78,12 +76,9 @@ var futureDate3 = document.querySelector('.future-date3');
 var futureDate4 = document.querySelector('.future-date4');
 var futureDate5 = document.querySelector('.future-date5');
 var futureTemp = document.querySelector('.future-temp')
-
-
 var today = dayjs();
 var nextDay = [];
 var searched = [];
-// console.log(searched);
 
 function init() {
     var savedCities = JSON.parse(localStorage.getItem("searched"));
@@ -92,6 +87,8 @@ function init() {
         searched = savedCities;
         console.log(searched);
     }
+    searchedCities.textContent = ""
+
     for (let i = 0; i < searched.length; i++) {
         var city = searched[i];
         var div = document.createElement("div");
@@ -101,32 +98,31 @@ function init() {
         console.log(city);
         searchedCities.appendChild(div);
     }
+    var card = document.querySelectorAll('.card');
+    for (let i = 0; i < card.length; i++) {
+     card[i].addEventListener("click", function(){
+        getApiCity(this.textContent);
+     })   
+    }
 }
 
 submit.addEventListener("click", function(event) {
     event.preventDefault();
-
     var city = searchButton.value.trim();
     if (city === "") {
         return;
     }
     getApiCity(city)
-
     searched.push(city)
     searchButton.value = "";
     localStorage.setItem("searched", JSON.stringify(searched))
     init()
 })
-
-
-// init()
     
-function getApiCity(event) {
-    // event.preventDefault(); 
+function getApiCity(cityName) {
     for (let i = document.images.length; i--> 0;) {
         document.images[i].parentNode.removeChild(document.images[i]);
     }
-    var cityName = document.querySelector('#city-name').value;
     console.log(cityName);
     var currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=imperial`;
      
@@ -156,7 +152,7 @@ function getApiCity(event) {
     var iconCode = data.weather[0].icon;
     var image = document.createElement("img");
     image.setAttribute("src", "https://openweathermap.org/img/wn/" + iconCode + ".png");
-
+    condition.textContent = ""
     condition.append(image)
 
     var futureWeatherURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=imperial`
@@ -167,73 +163,27 @@ function getApiCity(event) {
      })
      .then(function (data) {
         console.log(data);
-    // fiveDayForecast.textContent = ""
-    for (let i = 5; i < data.list.length; i=i+8) {
+    var index = 1
+
+    for (let i = 0; i < data.list.length; i=i+8) {
     console .log(data.list[i]);
-    var weatherIcon1 = document.querySelector('.weather-icon1')
-    var weatherIcon2 = document.querySelector('.weather-icon2')
-    var weatherIcon3 = document.querySelector('.weather-icon3')
-    var weatherIcon4 = document.querySelector('.weather-icon4')
-    var weatherIcon5 = document.querySelector('.weather-icon5')
-
-
-    var fiveDayIcon = data.list[1].weather[0].icon;
-    var image2 = document.createElement("img");
-    image2.setAttribute("src", "https://openweathermap.org/img/wn/" + fiveDayIcon + ".png");
-    // weatherIcon.append(image2)
-    weatherIcon1.append(image2) 
-    weatherIcon2.append(image2)        
-    weatherIcon3.append(image2)        
-    weatherIcon4.append(image2)        
-    weatherIcon5.append(image2)
-    var futureTemp1 = document.querySelector('.future-temp1');
-    var futureTemp2 = document.querySelector('.future-temp2');
-    var futureTemp3 = document.querySelector('.future-temp3');
-    var futureTemp4 = document.querySelector('.future-temp4');
-    var futureTemp5 = document.querySelector('.future-temp5');
-// change to data.list[0-4]? after fixing array
-    futureTemp1.textContent = `Temp: ${data.list[3].main.temp} °F` 
-    futureTemp2.textContent = `Temp: ${data.list[4].main.temp} °F`        
-    futureTemp3.textContent = `Temp: ${data.list[5].main.temp} °F`        
-    futureTemp4.textContent = `Temp: ${data.list[6].main.temp} °F`        
-    futureTemp5.textContent = `Temp: ${data.list[7].main.temp} °F`  
-    var futureWind1 = document.querySelector('.future-wind1');      
-    var futureWind2 = document.querySelector('.future-wind2');      
-    var futureWind3 = document.querySelector('.future-wind3');      
-    var futureWind4 = document.querySelector('.future-wind4');      
-    var futureWind5 = document.querySelector('.future-wind5');      
-   futureWind1.textContent = `Wind: ${data.list[i].wind.speed} MPH`
-   futureWind2.textContent = `Wind: ${data.list[i].wind.speed} MPH`
-   futureWind3.textContent = `Wind: ${data.list[i].wind.speed} MPH`
-   futureWind4.textContent = `Wind: ${data.list[i].wind.speed} MPH`
-   futureWind5.textContent = `Wind: ${data.list[i].wind.speed} MPH`
-   var futureHumidity1 = document.querySelector('.future-humidity1');
-   var futureHumidity2 = document.querySelector('.future-humidity2');
-   var futureHumidity3 = document.querySelector('.future-humidity3');
-   var futureHumidity4 = document.querySelector('.future-humidity4');
-   var futureHumidity5 = document.querySelector('.future-humidity5');
-   futureHumidity1.textContent = `Humidity: ${data.list[i].main.humidity}%`
-   futureHumidity2.textContent = `Humidity: ${data.list[i].main.humidity}%`
-   futureHumidity3.textContent = `Humidity: ${data.list[i].main.humidity}%`
-   futureHumidity4.textContent = `Humidity: ${data.list[i].main.humidity}%`
-   futureHumidity5.textContent = `Humidity: ${data.list[i].main.humidity}%`
-
-    // fiveDayForecast.innerHTML = fiveDayForecast.innerHTML + `<div class="col m-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">
-    // <p ></p>
-    // <p class="weather-icon"> ${image2} </p>
-    // <p>Temp: ${data.list[i].main.temp} °F</p>
-    // <p>Wind: ${data.list[i].wind.speed} MPH</p>
-    // <p>Humidity: ${data.list[i].main.humidity}%</p>
-    // </div>`   
-    // futureTemp.textContent = data.list[i].main.temp;
-
-        }
-    })
-    })
-  
-} 
-
-searchedCities.addEventListener('click', getApiCity) 
-
+    var weatherIcon = document.querySelector('.weather-icon'+ index)
+    weatherIcon.textContent = ""
+    console.log(data);
     
-// submit.addEventListener('click', getApiCity);
+    var fiveDayIcon = data.list[i].weather[0].icon;
+    var image1 = document.createElement("img");
+    image1.setAttribute("src", "https://openweathermap.org/img/wn/"+ fiveDayIcon + "@2x.png")
+    
+    weatherIcon.append(image1) 
+    var futureTemp1 = document.querySelector('.future-temp' + index);
+    var futureWind1 = document.querySelector('.future-wind' + index);      
+    var futureHumidity1 = document.querySelector('.future-humidity' + index);
+    futureTemp1.textContent = `Temp: ${data.list[i].main.temp} °F` 
+    futureWind1.textContent = `Wind: ${data.list[i].wind.speed} MPH`
+    futureHumidity1.textContent = `Humidity: ${data.list[i].main.humidity}%`
+    index++
+    }
+    })
+    })
+} 
